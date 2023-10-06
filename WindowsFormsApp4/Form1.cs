@@ -62,8 +62,7 @@ namespace WindowsFormsApp4
                 dt = worksheet.Cells.ExportDataTableAsString(0, 0, worksheet.Cells.MaxDataRow + 1
                     , worksheet.Cells.MaxDataColumn + 1, true);
 
-
-                DataBase db = new DataBase();
+                    DataBase db = new DataBase();
                 db.Connect_DB(dt);
 
                 dGridView_Base.DataSource = dt;

@@ -27,17 +27,17 @@ namespace WindowsFormsApp4
 
             try
             {
-                string tbleT = "dbo.T_tbl";
+                string tbleT = "TESTDB.dbo.T_tbl";
                 Conn.Open();
 
                 using (var adapter = new SqlDataAdapter($"IF OBJECT_ID('{tbleT}') IS NOT NULL  " +
                     $"DROP TABLE {tbleT}"
                     , Conn))
-
                 using (var builder = new SqlCommandBuilder(adapter))
                 {
                     adapter.Fill(dt);
                 }
+                //
 
                 string sql = $"Create Table {tbleT} (";
                 foreach (DataColumn column in dt.Columns)
@@ -46,20 +46,15 @@ namespace WindowsFormsApp4
                 }
                 sql = sql.TrimEnd(new char[] { ',' }) + ")";
 
+
+
                 SqlCommand cmd = new SqlCommand(sql, Conn);
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
                 cmd.ExecuteNonQuery();
 
-                using (var adapter = new SqlDataAdapter($"SELECT * FROM {tbleT}", Conn))
-                using (var builder = new SqlCommandBuilder(adapter))
-                {
-                    adapter.Fill(dt);
-                }
 
                 using (var bulk = new SqlBulkCopy(Conn))
                 {
                     bulk.DestinationTableName = tbleT;
-
                     bulk.WriteToServer(dt);
                 }
 
